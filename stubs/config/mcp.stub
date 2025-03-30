@@ -1,0 +1,9 @@
+{{{
+  exports({ to: app.configPath('mcp.ts') })
+}}}
+import { defineConfig } from '@7nohe/adonis-mcp'
+
+export default defineConfig({
+  ssePath: '/sse',
+  messagesPath: '/messages',
+})
