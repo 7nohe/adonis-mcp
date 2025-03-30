@@ -22,6 +22,10 @@ import { defineConfig } from '@7nohe/adonis-mcp'
 export default defineConfig({
   ssePath: '/sse',
   messagesPath: '/messages',
+  serverOptions: {
+    name: 'mymcp',
+    version: '0.0.1',
+  },
 })
 ```
 
@@ -33,9 +37,23 @@ You can use the `registerRoutes` method in `start/routes.ts` to define tools and
 
 ```ts
 import mcp from '@7nohe/adonis-mcp/services/main'
+import { ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 
 await mcp.registerRoutes((server) => {
+  server.resource(
+    'echo',
+    new ResourceTemplate('echo://{message}', { list: undefined }),
+    async (uri, { message }) => ({
+      contents: [
+        {
+          uri: uri.href,
+          text: `Resource echo: ${message}`,
+        },
+      ],
+    })
+  )
+
   server.tool('echo', { message: z.string() }, async ({ message }) => ({
     content: [{ type: 'text', text: `Tool echo: ${message}` }],
   }))
