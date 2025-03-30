@@ -7,12 +7,9 @@ import type { Implementation } from '@modelcontextprotocol/sdk/types.js'
 const McpController = () => import('./controllers/mcp_controller.js')
 
 export type McpConfig = {
-  ssePath: string
-  messagesPath: string
-  serverOptions: Omit<Implementation, 'name' | 'version'> & {
-    name?: string
-    version?: string
-  }
+  ssePath?: string
+  messagesPath?: string
+  serverOptions?: Implementation
 }
 
 export class Mcp {
@@ -49,8 +46,8 @@ export class Mcp {
       }
     }
 
-    const sseRoute = this.#router.get(this.config.ssePath, [McpControllerImpl, 'sse'])
-    const messagesRoute = this.#router.post(this.config.messagesPath, [
+    const sseRoute = this.#router.get(this.config.ssePath!, [McpControllerImpl, 'sse'])
+    const messagesRoute = this.#router.post(this.config.messagesPath!, [
       McpControllerImpl,
       'messages',
     ])
