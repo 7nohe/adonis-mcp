@@ -1,13 +1,18 @@
-import { Route } from '@adonisjs/core/http'
-import { HttpRouterService } from '@adonisjs/core/types'
-import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js'
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import type { Route } from '@adonisjs/core/http'
+import type { HttpRouterService } from '@adonisjs/core/types'
+import type { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js'
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import type { Implementation } from '@modelcontextprotocol/sdk/types.js'
 
 const McpController = () => import('./controllers/mcp_controller.js')
 
 export type McpConfig = {
   ssePath: string
   messagesPath: string
+  serverOptions: Omit<Implementation, 'name' | 'version'> & {
+    name?: string
+    version?: string
+  }
 }
 
 export class Mcp {

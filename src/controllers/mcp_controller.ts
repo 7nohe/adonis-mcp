@@ -10,6 +10,7 @@ export default class McpController {
     this.server = new McpServer({
       name: 'adonis-mcp-server',
       version: '1.0.0',
+      ...mcp.config.serverOptions,
     })
   }
 
