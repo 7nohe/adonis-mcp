@@ -59,6 +59,14 @@
   ],
   "author": "Daiki Urata",
   "license": "MIT",
+  "homepage": "https://github.com/7nohe/adonis-mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7nohe/adonis-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/7nohe/adonis-mcp/issues"
+  },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
     "@adonisjs/core": "^6.17.2",
