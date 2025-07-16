@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/7nohe-adonis-mcp-badge.png)](https://mseep.ai/app/7nohe-adonis-mcp)
+
 # Adonis MCP
 
 Adonis MCP is a package designed for the AdonisJS framework that provides support for the Model Context Protocol (MCP). With this package, you can easily build remote MCP servers using Server-Sent Events (SSE).
