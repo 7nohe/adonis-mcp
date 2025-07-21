@@ -20,8 +20,7 @@ Example:
 import { defineConfig } from '@7nohe/adonis-mcp'
 
 export default defineConfig({
-  ssePath: '/sse',
-  messagesPath: '/messages',
+  path: '/mcp',
   serverOptions: {
     name: 'mymcp',
     version: '0.0.1',
