@@ -87,7 +87,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.8.0"
+    "@modelcontextprotocol/sdk": "^1.16.0"
   },
   "peerDependencies": {
     "@adonisjs/core": "^6.2.0"

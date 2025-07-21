@@ -1,28 +1,33 @@
 import type { Route } from '@adonisjs/core/http'
 import type { HttpRouterService } from '@adonisjs/core/types'
-import type { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js'
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import type { Implementation } from '@modelcontextprotocol/sdk/types.js'
 
 const McpController = () => import('./controllers/mcp_controller.js')
 
 export type McpConfig = {
-  ssePath?: string
-  messagesPath?: string
+  path?: string
   serverOptions?: Implementation
 }
 
 export class Mcp {
-  transports: { [sessionId: string]: SSEServerTransport } = {}
+  transports: { [sessionId: string]: StreamableHTTPServerTransport } = {}
   #router: HttpRouterService
+  #server: McpServer
   config: McpConfig
 
   constructor(config: McpConfig, router: HttpRouterService) {
     this.#router = router
     this.config = config
+    this.#server = new McpServer({
+      name: 'adonis-mcp-server',
+      version: '1.0.0',
+      ...this.config.serverOptions,
+    })
   }
 
-  add(sessionId: string, transport: SSEServerTransport) {
+  add(sessionId: string, transport: StreamableHTTPServerTransport) {
     this.transports[sessionId] = transport
   }
 
@@ -34,27 +39,25 @@ export class Mcp {
     return this.transports[sessionId]
   }
 
+  getServer() {
+    return this.#server
+  }
+
   async registerRoutes(
     init: (server: McpServer) => void,
     routeHandlerModifier?: (route: Route) => void
   ) {
     const mcpController = await McpController()
-    class McpControllerImpl extends mcpController.default {
-      constructor() {
-        super()
-        init(this.server)
-      }
-    }
+    init(this.#server)
 
-    const sseRoute = this.#router.get(this.config.ssePath!, [McpControllerImpl, 'sse'])
-    const messagesRoute = this.#router.post(this.config.messagesPath!, [
-      McpControllerImpl,
-      'messages',
-    ])
+    const postRoute = this.#router.post(this.config.path!, [mcpController.default, 'post'])
+    const getRoute = this.#router.get(this.config.path!, [mcpController.default, 'get'])
+    const deleteRoute = this.#router.delete(this.config.path!, [mcpController.default, 'delete'])
 
     if (routeHandlerModifier) {
-      routeHandlerModifier(sseRoute)
-      routeHandlerModifier(messagesRoute)
+      routeHandlerModifier(postRoute)
+      routeHandlerModifier(getRoute)
+      routeHandlerModifier(deleteRoute)
     }
   }
 }
